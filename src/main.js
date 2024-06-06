@@ -150,6 +150,9 @@ const heartRateMonitor = (function () {
 		SAMPLING_CANVAS.height = IMAGE_HEIGHT;
 		VIDEO_ELEMENT.srcObject = VIDEO_STREAM;
 		VIDEO_ELEMENT.play();
+		VIDEO_ELEMENT.style.position = 'absolute';
+		VIDEO_ELEMENT.style.top = '-9999px';
+		VIDEO_ELEMENT.style.left = '-9999px';
 		MONITORING = true;
 
 		// Waiting helps stabilaze the camera image before taking samples
@@ -280,7 +283,7 @@ const heartRateMonitor = (function () {
 			crossings,
 		};
 	};
-
+	
 	const getAverageCrossings = (samples, average) => {
 		// Get each sample at points where the graph has crossed below the average level
 		// These are visible as the rising edges that pass the midpoint of the graph
