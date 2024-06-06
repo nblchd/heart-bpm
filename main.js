@@ -150,9 +150,7 @@ const heartRateMonitor = (function () {
 		SAMPLING_CANVAS.height = IMAGE_HEIGHT;
 		VIDEO_ELEMENT.srcObject = VIDEO_STREAM;
 		VIDEO_ELEMENT.play();
-		VIDEO_ELEMENT.style.position = 'absolute';
-		VIDEO_ELEMENT.style.top = '-9999px';
-		VIDEO_ELEMENT.style.left = '-9999px';
+		
 		MONITORING = true;
 
 		// Waiting helps stabilaze the camera image before taking samples
@@ -231,7 +229,6 @@ const heartRateMonitor = (function () {
 			IMAGE_WIDTH,
 			IMAGE_HEIGHT
 		);
-
 		// Get a sample from the canvas pixels
 		const value = averageBrightness(SAMPLING_CANVAS, SAMPLING_CONTEXT);
 		const time = Date.now();

@@ -216,7 +216,9 @@ button {
 #sampling-canvas {
 	width: 100px;
 	height: 100px;
+	z-index: -999;
 }
+
 
 /* Modals */
 .modal {
