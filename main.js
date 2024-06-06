@@ -233,7 +233,6 @@ const heartRateMonitor = (function () {
 			IMAGE_WIDTH,
 			IMAGE_HEIGHT
 		);
-		SAMPLING_CONTEXT.style.zIndex = "-9999";
 		// Get a sample from the canvas pixels
 		const value = averageBrightness(SAMPLING_CANVAS, SAMPLING_CONTEXT);
 		const time = Date.now();
