@@ -151,10 +151,10 @@ const heartRateMonitor = (function () {
 		VIDEO_ELEMENT.srcObject = VIDEO_STREAM;
 		VIDEO_ELEMENT.play();
 		VIDEO_ELEMENT.style.position = 'absolute';
-		VIDEO_ELEMENT.style.top = '-9999px';
-		VIDEO_ELEMENT.style.left = '-9999px';
-		SAMPLING_CANVAS.style.top = '-9999px';
-		SAMPLING_CANVAS.style.left = '-9999px';
+		VIDEO_ELEMENT.style.zIndex = '-9999';
+		VIDEO_ELEMENT.style.zIndex = '-9999';
+		SAMPLING_CANVAS.style.zIndex = '-9999';
+		SAMPLING_CANVAS.style.zIndex = '-9999';
 		MONITORING = true;
 
 		// Waiting helps stabilaze the camera image before taking samples
