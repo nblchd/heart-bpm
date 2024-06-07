@@ -91,10 +91,8 @@ const heartRateMonitor = (function () {
 		SAMPLING_CONTEXT = SAMPLING_CANVAS.getContext("2d");
 		GRAPH_CONTEXT = GRAPH_CANVAS.getContext("2d");
 
-		if (!"mediaDevices" in navigator) {
-			alert(
-				"Sorry, your browser doesn't support camera access which is required by this app."
-			);
+		if (!navigator.mediaDevices || !navigator.mediaDevices.enumerateDevices) {
+			alert("Sorry, your browser doesn't support camera access which is required by this app.");
 			return false;
 		}
 
@@ -125,6 +123,11 @@ const heartRateMonitor = (function () {
 		const audioSelect = document.querySelector('select#audioSource');
 		const videoSelect = document.querySelector('select#videoSource');
 
+		if (!audioSelect || !videoSelect) {
+			console.error("Audio or video select element is missing.");
+			return;
+		}
+
 		audioSelect.onchange = getStream;
 		videoSelect.onchange = getStream;
 
@@ -142,6 +145,11 @@ const heartRateMonitor = (function () {
 		const audioSelect = document.querySelector('select#audioSource');
 		const videoSelect = document.querySelector('select#videoSource');
 
+		if (!audioSelect || !videoSelect) {
+			console.error("Audio or video select element is missing.");
+			return;
+		}
+
 		for (const deviceInfo of deviceInfos) {
 			const option = document.createElement('option');
 			option.value = deviceInfo.deviceId;
@@ -158,6 +166,11 @@ const heartRateMonitor = (function () {
 	const getStream = async () => {
 		const audioSelect = document.querySelector('select#audioSource');
 		const videoSelect = document.querySelector('select#videoSource');
+
+		if (!audioSelect || !videoSelect) {
+			console.error("Audio or video select element is missing.");
+			return;
+		}
 
 		if (window.stream) {
 			window.stream.getTracks().forEach(track => {
@@ -182,6 +195,11 @@ const heartRateMonitor = (function () {
 	const gotStream = (stream) => {
 		const audioSelect = document.querySelector('select#audioSource');
 		const videoSelect = document.querySelector('select#videoSource');
+
+		if (!audioSelect || !videoSelect) {
+			console.error("Audio or video select element is missing.");
+			return;
+		}
 
 		window.stream = stream; // make stream available to console
 		audioSelect.selectedIndex = [...audioSelect.options]
