@@ -48,6 +48,7 @@
 				<section>
 					<label for="videoSource">Video source: </label>
 					<select id="videoSource"></select>
+					<button id="toggle-flashlight">Toggle Flashlight</button>
 				</section>
 			</main>
 
@@ -212,6 +213,7 @@
 			});
 
 			document.getElementById("bpm-display-container").addEventListener("click", heartRateMonitor.toggleMonitoring);
+			document.getElementById("toggle-flashlight").addEventListener("click", heartRateMonitor.toggleFlashlight);
 
 			document.documentElement.addEventListener("keyup", (event) => {
 				if (event.key === " ") {

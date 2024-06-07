@@ -46,6 +46,7 @@ const heartRateMonitor = (function () {
 	let VIDEO_STREAM;
 
 	let MONITORING = false;
+	let FLASHLIGHT_ON = false;
 
 	// Debug logging
 	const log = (...args) => {
@@ -117,6 +118,11 @@ const heartRateMonitor = (function () {
 
 	publicMethods.toggleMonitoring = () => {
 		MONITORING ? stopMonitoring() : startMonitoring();
+	};
+
+	publicMethods.toggleFlashlight = () => {
+		FLASHLIGHT_ON = !FLASHLIGHT_ON;
+		setTorchStatus(VIDEO_STREAM, FLASHLIGHT_ON);
 	};
 
 	const setupCamera = async () => {
