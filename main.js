@@ -92,7 +92,6 @@ const heartRateMonitor = (function () {
 		GRAPH_CONTEXT = GRAPH_CANVAS.getContext("2d");
 
 		if (!"mediaDevices" in navigator) {
-			// TODO: use something nicer than an alert
 			alert(
 				"Sorry, your browser doesn't support camera access which is required by this app."
 			);
@@ -104,6 +103,8 @@ const heartRateMonitor = (function () {
 
 		// Set the canvas size to its element size
 		handleResize();
+
+		setupCamera();
 	};
 
 	const handleResize = () => {
@@ -120,14 +121,51 @@ const heartRateMonitor = (function () {
 		MONITORING ? stopMonitoring() : startMonitoring();
 	};
 
+	const setupCamera = async () => {
+		const audioSelect = document.querySelector('select#audioSource');
+		const videoSelect = document.querySelector('select#videoSource');
+
+		audioSelect.onchange = getStream;
+		videoSelect.onchange = getStream;
+
+		await getStream();
+		const devices = await getDevices();
+		gotDevices(devices);
+	};
+
+	const getDevices = async () => {
+		const devices = await navigator.mediaDevices.enumerateDevices();
+		return devices;
+	};
+
+	const gotDevices = (deviceInfos) => {
+		const audioSelect = document.querySelector('select#audioSource');
+		const videoSelect = document.querySelector('select#videoSource');
+
+		for (const deviceInfo of deviceInfos) {
+			const option = document.createElement('option');
+			option.value = deviceInfo.deviceId;
+			if (deviceInfo.kind === 'audioinput') {
+				option.text = deviceInfo.label || `Microphone ${audioSelect.length + 1}`;
+				audioSelect.appendChild(option);
+			} else if (deviceInfo.kind === 'videoinput') {
+				option.text = deviceInfo.label || `Camera ${videoSelect.length + 1}`;
+				videoSelect.appendChild(option);
+			}
+		}
+	};
+
 	const getStream = async () => {
+		const audioSelect = document.querySelector('select#audioSource');
+		const videoSelect = document.querySelector('select#videoSource');
+
 		if (window.stream) {
 			window.stream.getTracks().forEach(track => {
 				track.stop();
 			});
 		}
-		const audioSource = document.querySelector('select#audioSource').value;
-		const videoSource = document.querySelector('select#videoSource').value;
+		const audioSource = audioSelect.value;
+		const videoSource = videoSelect.value;
 		const constraints = {
 			audio: { deviceId: audioSource ? { exact: audioSource } : undefined },
 			video: { deviceId: videoSource ? { exact: videoSource } : undefined }
@@ -142,9 +180,10 @@ const heartRateMonitor = (function () {
 	};
 
 	const gotStream = (stream) => {
-		window.stream = stream; // make stream available to console
 		const audioSelect = document.querySelector('select#audioSource');
 		const videoSelect = document.querySelector('select#videoSource');
+
+		window.stream = stream; // make stream available to console
 		audioSelect.selectedIndex = [...audioSelect.options]
 			.findIndex(option => option.text === stream.getAudioTracks()[0].label);
 		videoSelect.selectedIndex = [...videoSelect.options]
