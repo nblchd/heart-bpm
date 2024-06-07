@@ -46,8 +46,8 @@
 					<canvas id="graph-canvas"></canvas>
 				</section>
 				<section>
-					<label for="audioSource">Audio source: </label><select id="audioSource"></select>
-					<label for="videoSource">Video source: </label><select id="videoSource"></select>
+					<label for="videoSource">Video source: </label>
+					<select id="videoSource"></select>
 				</section>
 			</main>
 
@@ -139,7 +139,7 @@
 				<div class="content">
 					<div class="debug-view">
 						<div class="feeds">
-							<video id="camera-feed"></video>
+							<video autoplay muted playsinline id="camera-feed" style="display: none;"></video>
 							<canvas id="sampling-canvas" width="400" height="400"></canvas>
 						</div>
 						<div id="debug-log"></div>

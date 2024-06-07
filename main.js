@@ -120,15 +120,13 @@ const heartRateMonitor = (function () {
 	};
 
 	const setupCamera = async () => {
-		const audioSelect = document.querySelector('select#audioSource');
 		const videoSelect = document.querySelector('select#videoSource');
 
-		if (!audioSelect || !videoSelect) {
-			console.error("Audio or video select element is missing.");
+		if (!videoSelect) {
+			console.error("Video select element is missing.");
 			return;
 		}
 
-		audioSelect.onchange = getStream;
 		videoSelect.onchange = getStream;
 
 		await getStream();
@@ -142,21 +140,17 @@ const heartRateMonitor = (function () {
 	};
 
 	const gotDevices = (deviceInfos) => {
-		const audioSelect = document.querySelector('select#audioSource');
 		const videoSelect = document.querySelector('select#videoSource');
 
-		if (!audioSelect || !videoSelect) {
-			console.error("Audio or video select element is missing.");
+		if (!videoSelect) {
+			console.error("Video select element is missing.");
 			return;
 		}
 
 		for (const deviceInfo of deviceInfos) {
 			const option = document.createElement('option');
 			option.value = deviceInfo.deviceId;
-			if (deviceInfo.kind === 'audioinput') {
-				option.text = deviceInfo.label || `Microphone ${audioSelect.length + 1}`;
-				audioSelect.appendChild(option);
-			} else if (deviceInfo.kind === 'videoinput') {
+			if (deviceInfo.kind === 'videoinput') {
 				option.text = deviceInfo.label || `Camera ${videoSelect.length + 1}`;
 				videoSelect.appendChild(option);
 			}
@@ -164,11 +158,10 @@ const heartRateMonitor = (function () {
 	};
 
 	const getStream = async () => {
-		const audioSelect = document.querySelector('select#audioSource');
 		const videoSelect = document.querySelector('select#videoSource');
 
-		if (!audioSelect || !videoSelect) {
-			console.error("Audio or video select element is missing.");
+		if (!videoSelect) {
+			console.error("Video select element is missing.");
 			return;
 		}
 
@@ -177,10 +170,8 @@ const heartRateMonitor = (function () {
 				track.stop();
 			});
 		}
-		const audioSource = audioSelect.value;
 		const videoSource = videoSelect.value;
 		const constraints = {
-			audio: { deviceId: audioSource ? { exact: audioSource } : undefined },
 			video: { deviceId: videoSource ? { exact: videoSource } : undefined }
 		};
 		try {
@@ -193,17 +184,14 @@ const heartRateMonitor = (function () {
 	};
 
 	const gotStream = (stream) => {
-		const audioSelect = document.querySelector('select#audioSource');
 		const videoSelect = document.querySelector('select#videoSource');
 
-		if (!audioSelect || !videoSelect) {
-			console.error("Audio or video select element is missing.");
+		if (!videoSelect) {
+			console.error("Video select element is missing.");
 			return;
 		}
 
 		window.stream = stream; // make stream available to console
-		audioSelect.selectedIndex = [...audioSelect.options]
-			.findIndex(option => option.text === stream.getAudioTracks()[0].label);
 		videoSelect.selectedIndex = [...videoSelect.options]
 			.findIndex(option => option.text === stream.getVideoTracks()[0].label);
 		VIDEO_ELEMENT.srcObject = stream;
