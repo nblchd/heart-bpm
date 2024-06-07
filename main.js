@@ -219,11 +219,11 @@ const heartRateMonitor = (function () {
 			throw Error("Unable to start video stream");
 		}
 
-		try {
-			setTorchStatus(VIDEO_STREAM, true);
-		} catch (e) {
-			alert("Error:" + e);
-		}
+		// try {
+		// 	setTorchStatus(VIDEO_STREAM, true);
+		// } catch (e) {
+		// 	alert("Error:" + e);
+		// }
 
 		SAMPLING_CANVAS.width = IMAGE_WIDTH;
 		SAMPLING_CANVAS.height = IMAGE_HEIGHT;
