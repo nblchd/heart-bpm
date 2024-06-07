@@ -40,7 +40,7 @@ const heartRateMonitor = (function () {
 	let GRAPH_WIDTH;
 
 	// Whether to print debug messages
-	let DEBUG = false;
+	let DEBUG = true;
 
 	// Video stream object
 	let VIDEO_STREAM;
@@ -120,12 +120,40 @@ const heartRateMonitor = (function () {
 		MONITORING ? stopMonitoring() : startMonitoring();
 	};
 
-	const getCamera = async () => {
-		const devices = await navigator.mediaDevices.enumerateDevices();
-		const cameras = devices.filter(
-			(device) => device.kind === "videoinput"
-		);
-		return cameras[cameras.length - 1];
+	const getStream = async () => {
+		if (window.stream) {
+			window.stream.getTracks().forEach(track => {
+				track.stop();
+			});
+		}
+		const audioSource = document.querySelector('select#audioSource').value;
+		const videoSource = document.querySelector('select#videoSource').value;
+		const constraints = {
+			audio: { deviceId: audioSource ? { exact: audioSource } : undefined },
+			video: { deviceId: videoSource ? { exact: videoSource } : undefined }
+		};
+		try {
+			const stream = await navigator.mediaDevices.getUserMedia(constraints);
+			gotStream(stream);
+			return stream;
+		} catch (error) {
+			handleError(error);
+		}
+	};
+
+	const gotStream = (stream) => {
+		window.stream = stream; // make stream available to console
+		const audioSelect = document.querySelector('select#audioSource');
+		const videoSelect = document.querySelector('select#videoSource');
+		audioSelect.selectedIndex = [...audioSelect.options]
+			.findIndex(option => option.text === stream.getAudioTracks()[0].label);
+		videoSelect.selectedIndex = [...videoSelect.options]
+			.findIndex(option => option.text === stream.getVideoTracks()[0].label);
+		VIDEO_ELEMENT.srcObject = stream;
+	};
+
+	const handleError = (error) => {
+		console.error('Error: ', error);
 	};
 
 	const startMonitoring = async () => {
@@ -133,8 +161,8 @@ const heartRateMonitor = (function () {
 		handleResize();
 		setBpmDisplay("");
 
-		const camera = await getCamera();
-		VIDEO_STREAM = await startCameraStream(camera);
+		const stream = await getStream();
+		VIDEO_STREAM = stream;
 
 		if (!VIDEO_STREAM) {
 			throw Error("Unable to start video stream");
@@ -148,7 +176,6 @@ const heartRateMonitor = (function () {
 
 		SAMPLING_CANVAS.width = IMAGE_WIDTH;
 		SAMPLING_CANVAS.height = IMAGE_HEIGHT;
-		VIDEO_ELEMENT.srcObject = VIDEO_STREAM;
 		VIDEO_ELEMENT.play();
 		
 		MONITORING = true;
@@ -177,31 +204,6 @@ const heartRateMonitor = (function () {
 
 	const resetBuffer = () => {
 		SAMPLE_BUFFER.length = 0;
-	};
-
-	const startCameraStream = async (camera) => {
-		// At this point the browser asks for permission
-		let stream;
-		try {
-			stream = await navigator.mediaDevices.getUserMedia({
-				video: {
-					deviceId: camera.deviceId,
-					facingMode: ["user", "environment"],
-					width: { ideal: IMAGE_WIDTH },
-					height: { ideal: IMAGE_HEIGHT },
-
-					// Experimental:
-					whiteBalanceMode: "manual",
-					exposureMode: "manual",
-					focusMode: "manual",
-				},
-			});
-		} catch (error) {
-			alert("Failed to access camera!\nError: " + error.message);
-			return;
-		}
-
-		return stream;
 	};
 
 	const setTorchStatus = async (stream, status) => {
