@@ -4,7 +4,7 @@
 	<meta content="text/html;charset=utf-8" http-equiv="Content-Type" />
 	<meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no" />
 	<link rel="stylesheet" type="text/css" href="style.css" id="style" />
-	<title>💓 Heart Rate Monitor</title>
+	<title>💓 HRV Games</title>
 	<style>
 		:root {
 			/* Variables for both color schemes */
@@ -16,6 +16,8 @@
 
 		:root {
 			--page-background: #111;
+			--light-background: #fff;
+			--dark-color: #111
 			--page-color: #ddd;
 			--text-color-muted: #666;
 			--graph-background: transparent;
@@ -30,7 +32,7 @@
 		<div class="main-view">
 			<header>
 				<div>
-					<h1>Heart Rate Monitor</h1>
+					<h1>HRV Games</h1>
 					<small>Tap the circle to start / stop</small>
 				</div>
 			</header>
@@ -54,7 +56,7 @@
 				</section>
 			</main>
 
-			<footer>
+			<!-- <footer>
 				<button class="icon-button menu-toggle">
 					<span>Menu</span>
 				</button>
@@ -71,7 +73,7 @@
 						</li>
 					</ul>
 				</nav>
-			</footer>
+			</footer> -->
 		</div>
 
 		<div class="modal" data-name="instructions">
@@ -158,20 +160,20 @@
 			document.querySelector(`.modal[data-name='${name}']`).classList.add("open");
 		}
 
-		function setupNav() {
-			document.querySelector("button.menu-toggle").addEventListener("click", () => {
-				document.querySelector("nav.menu").classList.toggle("open");
-			});
-			document.querySelectorAll("nav a").forEach((link) => {
-				link.addEventListener("click", (event) => {
-					event.preventDefault();
-					document.querySelector("nav.menu").classList.toggle("open");
+		// function setupNav() {
+		// 	document.querySelector("button.menu-toggle").addEventListener("click", () => {
+		// 		document.querySelector("nav.menu").classList.toggle("open");
+		// 	});
+		// 	document.querySelectorAll("nav a").forEach((link) => {
+		// 		link.addEventListener("click", (event) => {
+		// 			event.preventDefault();
+		// 			document.querySelector("nav.menu").classList.toggle("open");
 
-					const modalName = event.target.getAttribute("data-modal-name");
-					openModal(modalName);
-				});
-			});
-		}
+		// 			const modalName = event.target.getAttribute("data-modal-name");
+		// 			openModal(modalName);
+		// 		});
+		// 	});
+		// }
 
 		function setupModals() {
 			document.querySelectorAll(".modal").forEach((modal) => {
@@ -187,7 +189,7 @@
 		}
 
 		document.addEventListener("DOMContentLoaded", function () {
-			setupNav();
+			// setupNav();
 			setupModals();
 
 			// Allow setting various flags and options via the hash fragment

@@ -10,8 +10,8 @@ body {
 }
 
 body {
-	background: var(--page-background);
-	color: var(--page-color);
+	background: var(--light-background);
+	color: var(--dark-color);
 	font-family: sans-serif;
 }
 
@@ -237,14 +237,14 @@ button {
 	
 }
 .video-select option{
-	background-color: #000;
+	background-color: #fff;
 	border-radius: 10px;
 }
 
 .btn-base {
 	border: 2px solid #ff7766;
     border-radius: 10px;
-    color: #fff;
+    color: #000;
     background: transparent;
     padding: 10px;
 }
